@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: root
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping"]
+      interval: 4s
+      timeout: 4s
+      retries: 10
+      start_period: 10s
+
+  app:
+    depends_on:
+      mysql:
+        condition: service_healthy
+    build: .
+    ports:
+      - 3000:80
